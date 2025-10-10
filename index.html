@@ -1,112 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
   <title>Product Catalog with Filters</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
       padding: 20px;
     }
-    .filters {
+
+    h1 {
+      text-align: center;
       margin-bottom: 20px;
     }
-    .filters select,
-    .filters input {
-      padding: 5px 10px;
-      margin-right: 10px;
-      font-size: 1rem;
+
+    .filter-buttons {
+      text-align: center;
+      margin-bottom: 30px;
     }
-    button {
-      padding: 6px 15px;
-      font-size: 1rem;
+
+    .filter-buttons button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      background-color: #333;
+      color: white;
       cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
     }
-    .product-list {
+
+    .filter-buttons button.active {
+      background-color: #007bff;
+    }
+
+    .product-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
+      justify-content: center;
     }
-    .product-card {
-      border: 1px solid #ccc;
-      padding: 10px;
-      width: 200px;
-      border-radius: 5px;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+
+    .product {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 220px;
+      overflow: hidden;
+      transition: transform 0.2s ease;
     }
-    .product-card h3 {
-      margin: 0 0 10px 0;
+
+    .product:hover {
+      transform: scale(1.03);
+    }
+
+    .product img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .product h3 {
+      margin: 10px;
+      font-size: 16px;
+    }
+
+    .product p {
+      margin: 0 10px 5px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .product .price {
+      color: #28a745;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Product Catalog</h1>
 
-  <div class="filters">
-    <select id="categoryFilter">
-      <option value="all">All Categories</option>
-      <option value="electronics">Electronics</option>
-      <option value="clothing">Clothing</option>
-      <option value="books">Books</option>
-    </select>
+<h1>Product Catalog</h1>
 
-    <input type="number" id="minPrice" placeholder="Min Price" min="0" />
-    <input type="number" id="maxPrice" placeholder="Max Price" min="0" />
-    <button onclick="applyFilters()">Apply Filters</button>
+<div class="filter-buttons">
+  <button class="active" onclick="filterProducts('all')">All</button>
+  <button onclick="filterProducts('shoes')">Shoes</button>
+  <button onclick="filterProducts('shirts')">Shirts</button>
+  <button onclick="filterProducts('accessories')">Accessories</button>
+</div>
+
+<div class="product-grid">
+  <!-- Shoes -->
+  <div class="product" data-category="shoes">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdUmNblMXWmQo2djj5E6lc767XoLkmDZtVNQ&s" alt="Running Shoes">
+    <h3>Running Shoes</h3>
+    <p>Shoes</p>
+    <p class="price">$59.99</p>
   </div>
 
-  <div id="productList" class="product-list"></div>
+  <div class="product" data-category="shoes">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkPxBakapro5VEsL1chauySLymL-HCJbNs3A&s" alt="Casual Sneakers">
+    <h3>Casual Sneakers</h3>
+    <p>Shoes</p>
+    <p class="price">$49.99</p>
+  </div>
 
-  <script>
-    const products = [
-      { id: 1, name: "Laptop", category: "electronics", price: 899 },
-      { id: 2, name: "Smartphone", category: "electronics", price: 499 },
-      { id: 3, name: "T-shirt", category: "clothing", price: 19 },
-      { id: 4, name: "Jeans", category: "clothing", price: 49 },
-      { id: 5, name: "JavaScript Book", category: "books", price: 29 },
-      { id: 6, name: "Headphones", category: "electronics", price: 199 },
-    ];
+  <!-- Shirts -->
+  <div class="product" data-category="shirts">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm5ESZL_Idpok09kEJoLhGtMm5hzj1Si___Q&s" alt="Cotton Shirt">
+    <h3>Cotton Shirt</h3>
+    <p>Shirts</p>
+    <p class="price">$29.99</p>
+  </div>
 
-    function displayProducts(productArray) {
-      const container = document.getElementById("productList");
-      container.innerHTML = "";
+  <div class="product" data-category="shirts">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHc3e0ZyDG_GQZBLAuDuhUPrFMsZZPEb26NA&s" alt="Formal Shirt">
+    <h3>Formal Shirt</h3>
+    <p>Shirts</p>
+    <p class="price">$39.99</p>
+  </div>
 
-      if (productArray.length === 0) {
-        container.innerHTML = "<p>No products found.</p>";
-        return;
-      }
+  <!-- Accessories -->
+  <div class="product" data-category="accessories">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwrYBwW780sxotk7Qz-MHMAESeNU98nUcoxw&s" alt="Leather Watch">
+    <h3>Leather Watch</h3>
+    <p>Accessories</p>
+    <p class="price">$79.99</p>
+  </div>
 
-      productArray.forEach(product => {
-        const card = document.createElement("div");
-        card.className = "product-card";
-        card.innerHTML = `
-          <h3>${product.name}</h3>
-          <p>Category: ${product.category}</p>
-          <p>Price: $${product.price}</p>
-        `;
-        container.appendChild(card);
-      });
-    }
+  <div class="product" data-category="accessories">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0T8QmUkeUum_pwssKaVR1erQ_kYkca5OlRw&s" alt="Leather Bag">
+    <h3>Leather Bag</h3>
+    <p>Accessories</p>
+    <p class="price">$89.99</p>
+  </div>
+</div>
 
-    function applyFilters() {
-      const category = document.getElementById("categoryFilter").value;
-      const minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
-      const maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
+<script>
+  function filterProducts(category) {
+    const products = document.querySelectorAll('.product');
+    const buttons = document.querySelectorAll('.filter-buttons button');
 
-      const filtered = products.filter(product => {
-        return (
-          (category === "all" || product.category === category) &&
-          product.price >= minPrice &&
-          product.price <= maxPrice
-        );
-      });
+    // Update active button
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
 
-      displayProducts(filtered);
-    }
+    products.forEach(product => {
+      const productCategory = product.getAttribute('data-category');
+      product.style.display = (category === 'all' || productCategory === category) ? 'block' : 'none';
+    });
+  }
+</script>
 
-    // Initial display
-    displayProducts(products);
-  </script>
 </body>
 </html>
